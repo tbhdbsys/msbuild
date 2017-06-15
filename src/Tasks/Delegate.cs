@@ -87,7 +87,7 @@ namespace Microsoft.Build.Tasks
     internal delegate void GetAssemblyMetadata
     (
         string path,
-        ConcurrentDictionary<string, AssemblyMetadata> metadataCache,
+        ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache,
         out AssemblyNameExtension[] dependencies,
         out string[] scatterFiles,
         out FrameworkName frameworkNameAttribute

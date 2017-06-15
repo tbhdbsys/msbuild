@@ -194,20 +194,20 @@ namespace Microsoft.Build.Tasks
         /// assemblies and  the list of scatter files.
         /// </summary>
         /// <param name="path">Path to the assembly.</param>
-        /// <param name="metadataCache">Cache of pre-extracted assembly metadata.</param>
+        /// <param name="assemblyMetadataCache">Cache of pre-extracted assembly metadata.</param>
         /// <param name="dependencies">Receives the list of dependencies.</param>
         /// <param name="scatterFiles">Receives the list of associated scatter files.</param>
         /// <param name="frameworkName">Gets the assembly name.</param>
         internal static void GetAssemblyMetadata
         (
             string path,
-            ConcurrentDictionary<string, AssemblyMetadata> metadataCache,
+            ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache,
             out AssemblyNameExtension[] dependencies,
             out string[] scatterFiles,
             out FrameworkName frameworkName
         )
         {
-            var import = metadataCache?.GetOrAdd(path, p => new AssemblyMetadata(p))
+            var import = assemblyMetadataCache?.GetOrAdd(path, p => new AssemblyMetadata(p))
                 ?? new AssemblyMetadata(path);
 
             dependencies = import.Dependencies;

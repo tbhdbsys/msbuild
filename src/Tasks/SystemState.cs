@@ -465,14 +465,14 @@ namespace Microsoft.Build.Tasks
         /// assemblies and  the list of scatter files.
         /// </summary>
         /// <param name="path">Path to the assembly.</param>
-        /// <param name="metadataCache">Cache for pre-extracted assembly metadata.</param>
+        /// <param name="assemblyMetadataCache">Cache for pre-extracted assembly metadata.</param>
         /// <param name="dependencies">Receives the list of dependencies.</param>
         /// <param name="scatterFiles">Receives the list of associated scatter files.</param>
         /// <param name="frameworkName"></param>
         private void GetAssemblyMetadata
         (
             string path,
-            ConcurrentDictionary<string, AssemblyMetadata> metadataCache,
+            ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache,
             out AssemblyNameExtension[] dependencies,
             out string[] scatterFiles,
             out FrameworkName frameworkName
@@ -484,7 +484,7 @@ namespace Microsoft.Build.Tasks
                 getAssemblyMetadata
                 (
                     path,
-                    metadataCache,
+                    assemblyMetadataCache,
                     out fileState.dependencies,
                     out fileState.scatterFiles,
                     out fileState.frameworkName

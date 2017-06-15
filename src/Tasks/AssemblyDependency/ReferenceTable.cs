@@ -161,7 +161,7 @@ namespace Microsoft.Build.Tasks
         /// </summary>
         private WarnOrErrorOnTargetArchitectureMismatchBehavior _warnOrErrorOnTargetArchitectureMismatch = WarnOrErrorOnTargetArchitectureMismatchBehavior.Warning;
 
-        private readonly ConcurrentDictionary<string, AssemblyMetadata> _metadataCache;
+        private readonly ConcurrentDictionary<string, AssemblyMetadata> _assemblyMetadataCache;
 
         /// <summary>
         /// When we exclude an assembly from resolution because it is part of out exclusion list we need to let the user know why this is. 
@@ -197,7 +197,7 @@ namespace Microsoft.Build.Tasks
         /// <param name="getAssemblyMetadata">Delegate used for finding dependencies of a file.</param>
         /// <param name="getRegistrySubKeyNames">Used to get registry subkey names.</param>
         /// <param name="getRegistrySubKeyDefaultValue">Used to get registry default values.</param>
-        /// <param name="metadataCache">Cache of metadata already read from paths.</param>
+        /// <param name="assemblyMetadataCache">Cache of metadata already read from paths.</param>
         internal ReferenceTable
         (
             IBuildEngine buildEngine,
@@ -238,7 +238,7 @@ namespace Microsoft.Build.Tasks
             WarnOrErrorOnTargetArchitectureMismatchBehavior warnOrErrorOnTargetArchitectureMismatch,
             bool ignoreFrameworkAttributeVersionMismatch,
             bool unresolveFrameworkAssembliesFromHigherFrameworks,
-            ConcurrentDictionary<string, AssemblyMetadata> metadataCache)
+            ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache)
         {
             _buildEngine = buildEngine;
             _log = log;
@@ -271,7 +271,7 @@ namespace Microsoft.Build.Tasks
             _readMachineTypeFromPEHeader = readMachineTypeFromPEHeader;
             _warnOrErrorOnTargetArchitectureMismatch = warnOrErrorOnTargetArchitectureMismatch;
             _ignoreFrameworkAttributeVersionMismatch = ignoreFrameworkAttributeVersionMismatch;
-            _metadataCache = metadataCache;
+            _assemblyMetadataCache = assemblyMetadataCache;
 
             // Set condition for when to check assembly version against the target framework version 
             _checkAssemblyVersionAgainstTargetFrameworkVersion = unresolveFrameworkAssembliesFromHigherFrameworks || ((_projectTargetFramework ?? ReferenceTable.s_targetFrameworkVersion_40) <= ReferenceTable.s_targetFrameworkVersion_40);
@@ -1012,7 +1012,7 @@ namespace Microsoft.Build.Tasks
             _getAssemblyMetadata
             (
                 reference.FullPath,
-                _metadataCache,
+                _assemblyMetadataCache,
                 out dependentAssemblies,
                 out scatterFiles,
                 out frameworkName

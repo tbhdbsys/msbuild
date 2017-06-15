@@ -2085,7 +2085,7 @@ namespace Microsoft.Build.Tasks
 
                     SystemProcessorArchitecture processorArchitecture = TargetProcessorArchitectureToEnumeration(_targetProcessorArchitecture);
 
-                    ConcurrentDictionary<string, AssemblyMetadata> metadataCache =
+                    ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache =
                         Traits.Instance.EscapeHatches.CacheAssemblyInformation
                             ? new ConcurrentDictionary<string, AssemblyMetadata>()
                             : null;
@@ -2131,7 +2131,7 @@ namespace Microsoft.Build.Tasks
                         _warnOrErrorOnTargetArchitectureMismatch,
                         _ignoreTargetFrameworkAttributeVersionMismatch,
                         _unresolveFrameworkAssembliesFromHigherFrameworks,
-                        metadataCache
+                        assemblyMetadataCache
                         );
 
                     // If AutoUnify, then compute the set of assembly remappings.
@@ -2256,7 +2256,7 @@ namespace Microsoft.Build.Tasks
                         // when we are not producing the dependency graph look for direct dependencies of primary references.
                         foreach (var resolvedReference in dependencyTable.References.Values)
                         {
-                            var rawDependencies = GetDependencies(resolvedReference, fileExists, getAssemblyMetadata, metadataCache);
+                            var rawDependencies = GetDependencies(resolvedReference, fileExists, getAssemblyMetadata, assemblyMetadataCache);
                             if (rawDependencies != null)
                             {
                                 foreach (var dependentReference in rawDependencies)
@@ -2374,9 +2374,9 @@ namespace Microsoft.Build.Tasks
         /// <param name="resolvedReference">reference we are interested</param>
         /// <param name="fileExists">the delegate to check for the existence of a file.</param>
         /// <param name="getAssemblyMetadata">the delegate to access assembly metadata</param>
-        /// <param name="metadataCache">Cache of pre-extracted assembly metadata.</param>
+        /// <param name="assemblyMetadataCache">Cache of pre-extracted assembly metadata.</param>
         /// <returns>list of dependencies</returns>
-        private AssemblyNameExtension[] GetDependencies(Reference resolvedReference, FileExists fileExists, GetAssemblyMetadata getAssemblyMetadata, ConcurrentDictionary<string, AssemblyMetadata> metadataCache)
+        private AssemblyNameExtension[] GetDependencies(Reference resolvedReference, FileExists fileExists, GetAssemblyMetadata getAssemblyMetadata, ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache)
         {
             AssemblyNameExtension[] result = null;
             if (resolvedReference != null && resolvedReference.IsPrimary && !resolvedReference.IsBadImage)
@@ -2388,7 +2388,7 @@ namespace Microsoft.Build.Tasks
                     // in case of P2P that have not build the reference can be resolved but file does not exist on disk. 
                     if (fileExists(resolvedReference.FullPath))
                     {
-                        getAssemblyMetadata(resolvedReference.FullPath, metadataCache, out result, out scatterFiles, out frameworkName);
+                        getAssemblyMetadata(resolvedReference.FullPath, assemblyMetadataCache, out result, out scatterFiles, out frameworkName);
                     }
                 }
                 catch (Exception e)

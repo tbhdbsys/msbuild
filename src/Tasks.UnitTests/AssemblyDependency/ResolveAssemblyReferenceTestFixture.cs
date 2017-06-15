@@ -1715,14 +1715,14 @@ namespace Microsoft.Build.UnitTests.ResolveAssemblyReference_Tests
         /// assemblies and  the list of scatter files.
         /// </summary>
         /// <param name="path">Path to the assembly.</param>
-        /// <param name="metadataCache">Ignored.</param>
+        /// <param name="assemblyMetadataCache">Ignored.</param>
         /// <param name="dependencies">Receives the list of dependencies.</param>
         /// <param name="scatterFiles">Receives the list of associated scatter files.</param>
         /// <param name="frameworkName">Receives the assembly framework name.</param>
         internal static void GetAssemblyMetadata
         (
             string path,
-            ConcurrentDictionary<string, AssemblyMetadata> metadataCache,
+            ConcurrentDictionary<string, AssemblyMetadata> assemblyMetadataCache,
             out AssemblyNameExtension[] dependencies,
             out string[] scatterFiles,
             out FrameworkNameVersioning frameworkName
